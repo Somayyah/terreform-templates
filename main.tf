@@ -12,7 +12,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "vision2" {
-  name     = "vision"
+  name     = "vision2"
   location = "East US"
   tags = {
     environment : "development"
