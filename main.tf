@@ -40,3 +40,13 @@ resource "azurerm_network_security_group" "watari-ai-sg" {
   location = azurerm_resource_group.watari-ai.location
   tags = azurerm_resource_group.watari-ai.tags
 }
+
+resource "azurerm_network_security_rule" "watari-ai-sgr1" {
+  name = "watari-ai-sgr1"
+  resource_group_name = azurerm_resource_group.watari-ai.name
+  network_security_group_name = azurerm_network_security_group.watari-ai-sg.name
+  protocol = "Icmp"
+  access = "Deny"
+  priority = 100
+  direction = "Inbound"
+}
