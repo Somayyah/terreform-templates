@@ -11,7 +11,7 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "vision" {
+resource "azurerm_resource_group" "vision_2" {
   name     = "vision"
   location = "East US"
 }
