@@ -14,6 +14,9 @@ provider "azurerm" {
 resource "azurerm_resource_group" "vision2" {
   name     = "vision"
   location = "East US"
+  tags = {
+    environment : "development"
+  }
 }
 
 
