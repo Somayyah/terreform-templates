@@ -8,7 +8,11 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
 }
 
 resource "azurerm_resource_group" "watari-ai" {
@@ -74,10 +78,23 @@ resource "azurerm_subnet_network_security_group_association" "watari-ai-s-n-sg-a
   network_security_group_id = azurerm_network_security_group.watari-ai-sg.id
 }
 
-resource "azurerm_public_ip" " watari-ai-ip" {
+resource "azurerm_public_ip" "watari-ai-ip" {
   name                = "watari-ai-public-ip"
   resource_group_name = azurerm_resource_group.watari-ai.name
   location            = azurerm_resource_group.watari-ai.location
   allocation_method   = "Static"
-  tags = azurerm_resource_group.watari-ai.tags
+  tags                = azurerm_resource_group.watari-ai.tags
+}
+
+resource "azurerm_network_interface" "watari-ai-nic" { 
+  name                = "watari-ai-nic"
+  resource_group_name = azurerm_resource_group.watari-ai.name
+  location            = azurerm_resource_group.watari-ai.location
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.watari-ai-subnet.id
+    private_ip_address_allocation = "Dynamic"
+  }
+
 }
