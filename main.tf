@@ -109,6 +109,8 @@ resource "azurerm_linux_virtual_machine" "watari-ai-linux-vm" {
     azurerm_network_interface.watari-ai-nic.id,
   ]
 
+  custom_data = filebase64("./customdata.tpl")
+  
   admin_ssh_key {
     username   = "adminuser"
     public_key = file("~/.ssh/vm_rsa.pub")
