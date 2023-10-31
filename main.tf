@@ -1,10 +1,3 @@
-resource "azurerm_resource_group" "watari-ai" {
-  name     = "watari-ai"
-  location = "East US"
-  tags = {
-    environment : "development"
-  }
-}
 
 resource "azurerm_virtual_network" "watari-ai-vn" {
   name                = "watari-ai-vn"

@@ -1,39 +1,42 @@
-data "azurerm_client_config" "current" {}
+// Create Azure OpenAI resource
 
-resource "azurerm_resource_group" "watari-ai" {
-  name     = "watari-ai"
-  location = "UK South"
-  tags = {
-    environment : "development"
-  }
+resource "azurerm_cognitive_account" "watari-ai-aoai" {
+  name                = "watari-ai-aoai"
+  location            = azurerm_resource_group.watari-ai.location
+  resource_group_name = azurerm_resource_group.watari-ai.name
+  kind                = "OpenAI"
+
+  sku_name = "S0"
+
+  tags = azurerm_resource_group.watari-ai.tags
+
 }
 
-resource "azurerm_key_vault" "watari-ai-key-vault" {
-  name                        = "watari-ai-key-vault"
-  location                    = azurerm_resource_group.watari-ai.location
-  tags                        = azurerm_resource_group.watari-ai.tags
-  resource_group_name         = azurerm_resource_group.watari-ai.name
-  enabled_for_disk_encryption = true
-  tenant_id                   = data.azurerm_client_config.current.tenant_id
-  soft_delete_retention_days  = 7
-  purge_protection_enabled    = false
+// Create Azure Speech resource
 
-  sku_name = "standard"
+resource "azurerm_cognitive_account" "watari-ai-speech" {
+  name                = "watari-ai-speech"
+  location            = azurerm_resource_group.watari-ai.location
+  resource_group_name = azurerm_resource_group.watari-ai.name
+  kind                = "Speech"
 
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
+  sku_name = "S0"
 
-    key_permissions = [
-      "Get",
-    ]
+  tags = azurerm_resource_group.watari-ai.tags
+}
 
-    secret_permissions = [
-      "Get",
-    ]
+// Create Azure cognitive deployment
 
-    storage_permissions = [
-      "Get",
-    ]
+resource "azurerm_cognitive_deployment" "watari-ai-cd" {
+  name                 = "watari-ai-cd"
+  cognitive_account_id = azurerm_cognitive_account.watari-ai-aoai.id
+  model {
+    format  = "OpenAI"
+    name    = "gpt-4-32k"
+    version = "1"
+  }
+
+  scale {
+    type = "Standard"
   }
 }
