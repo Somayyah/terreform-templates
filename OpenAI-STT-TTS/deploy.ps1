@@ -21,7 +21,7 @@ terraform init
 terraform plan
 
 # Run terraform apply
-##terraform apply -auto-approve
+terraform apply -auto-approve
 
 # Clear the .env file
 if (Test-Path .env) {
@@ -35,5 +35,10 @@ $outputKeys = @("OPEN_AI_ENDPOINT", "OPEN_AI_KEY", "SPEECH_KEY", "SPEECH_REGION"
 # Loop through each key and append to .env
 foreach ($keyName in $outputKeys) {
     $keyValue = terraform output -raw $keyName
-    "${keyName.ToUpper()}=$keyValue" | Out-File .env -Append
+    if ($keyValue) {
+        $outputString = $keyName.ToUpper() + "=" + $keyValue
+        $outputString | Out-File .env -Append
+    }
 }
+
+python src/main.py

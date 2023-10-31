@@ -9,7 +9,6 @@ resource "azurerm_cognitive_account" "watari-ai-aoai" {
   sku_name = "S0"
 
   tags = azurerm_resource_group.watari-ai.tags
-
 }
 
 // Create Azure Speech resource
@@ -18,25 +17,9 @@ resource "azurerm_cognitive_account" "watari-ai-speech" {
   name                = "watari-ai-speech"
   location            = azurerm_resource_group.watari-ai.location
   resource_group_name = azurerm_resource_group.watari-ai.name
-  kind                = "Speech"
+  kind                = "SpeechServices"
 
   sku_name = "S0"
 
   tags = azurerm_resource_group.watari-ai.tags
-}
-
-// Create Azure cognitive deployment
-
-resource "azurerm_cognitive_deployment" "watari-ai-cd" {
-  name                 = "watari-ai-cd"
-  cognitive_account_id = azurerm_cognitive_account.watari-ai-aoai.id
-  model {
-    format  = "OpenAI"
-    name    = "gpt-4-32k"
-    version = "1"
-  }
-
-  scale {
-    type = "Standard"
-  }
 }
