@@ -12,13 +12,6 @@ resource "azurerm_cognitive_account" "watari-ai-aoai" {
 
 }
 
-module "openai" {
-  source  = "Azure/openai/azurerm"
-  version = "0.1.1"
-  # insert the 2 required variables here
-}
-
-
 // Create Azure Speech resource
 
 resource "azurerm_cognitive_account" "watari-ai-speech" {

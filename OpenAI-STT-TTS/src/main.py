@@ -8,7 +8,7 @@ openai.api_type = 'azure'
 openai.api_version = '2022-12-01'
 
 # This will correspond to the custom name you chose for your deployment when you deployed a model.
-deployment_id='text-davinci-003' 
+deployment_id='gpt-4-32k' 
 
 # This example requires environment variables named "SPEECH_KEY" and "SPEECH_REGION"
 speech_config = speechsdk.SpeechConfig(subscription=os.environ.get('SPEECH_KEY'), region=os.environ.get('SPEECH_REGION'))

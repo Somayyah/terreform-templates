@@ -16,9 +16,12 @@ if (-not (Test-Path "resource-group.tf")) {
 
 # Run terraform init
 terraform init
-<# 
+
+# Run terraform plan
+terraform plan
+
 # Run terraform apply
-terraform apply -auto-approve
+##terraform apply -auto-approve
 
 # Clear the .env file
 if (Test-Path .env) {
@@ -26,7 +29,11 @@ if (Test-Path .env) {
 }
 
 # Get the output and save to .env file
-$key = terraform output -raw storage_account_primary_access_key
-"STORAGE_ACCOUNT_PRIMARY_ACCESS_KEY=$key" | Out-File .env -Append
+# Define an array of output keys
+$outputKeys = @("OPEN_AI_ENDPOINT", "OPEN_AI_KEY", "SPEECH_KEY", "SPEECH_REGION")
 
-# Add similar lines for other keys you want to save #>
+# Loop through each key and append to .env
+foreach ($keyName in $outputKeys) {
+    $keyValue = terraform output -raw $keyName
+    "${keyName.ToUpper()}=$keyValue" | Out-File .env -Append
+}
