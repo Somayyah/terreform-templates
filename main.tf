@@ -1,20 +1,3 @@
-terraform {
-  required_version = ">= 0.12"
-  required_providers {
-    azurerm = {
-      source = "hashicorp/azurerm"
-    }
-  }
-}
-
-provider "azurerm" {
-  features {
-    resource_group {
-      prevent_deletion_if_contains_resources = false
-    }
-  }
-}
-
 resource "azurerm_resource_group" "watari-ai" {
   name     = "watari-ai"
   location = "East US"
