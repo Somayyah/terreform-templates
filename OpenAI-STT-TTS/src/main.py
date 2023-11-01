@@ -30,7 +30,7 @@ tts_sentence_end = [ ".", "!", "?", ";", "。", "！", "？", "；", "\n" ]
 # Prompts Azure OpenAI with a request and synthesizes the response.
 def ask_openai(prompt):
     # Ask Azure OpenAI in streaming way
-    response = openai.ChatCompletion.create(engine=deployment_id, model="gpt-3.5-turbo", prompt=prompt, max_tokens=200, stream=False)
+    response = openai.ChatCompletion.create(engine=deployment_id, model="gpt-4-0613", prompt=prompt, max_tokens=200, stream=False)
     collected_messages = []
     last_tts_request = None
 

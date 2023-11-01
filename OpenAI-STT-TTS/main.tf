@@ -30,7 +30,7 @@ resource "azurerm_cognitive_deployment" "watari-ai-aoai-cd" {
   cognitive_account_id = azurerm_cognitive_account.watari-ai-aoai.id
   model {
     format  = "OpenAI"
-    name    = "gpt-3.5-turbo"
+    name    = "gpt-4"
     version = "0613"
   }
 
