@@ -23,9 +23,12 @@ terraform plan
 # Run terraform apply
 terraform apply -auto-approve
 
+# Path to the .env file in the child directory
+$envFilePath = ".\src\.env"
+
 # Clear the .env file
-if (Test-Path .env) {
-    Remove-Item .env
+if (Test-Path $envFilePath) {
+    Remove-Item $envFilePath
 }
 
 # Get the output and save to .env file
@@ -36,8 +39,8 @@ $outputKeys = @("OPEN_AI_ENDPOINT", "OPEN_AI_KEY", "SPEECH_KEY", "SPEECH_REGION"
 foreach ($keyName in $outputKeys) {
     $keyValue = terraform output -raw $keyName
     if ($keyValue) {
-        $outputString = $keyName.ToUpper() + "=" + $keyValue
-        $outputString | Out-File .env -Append
+        $outputString = $keyName.ToUpper() + "=" + '"' + $keyValue + '"'
+        $outputString | Out-File -FilePath $envFilePath -Encoding utf8 -Append
     }
 }
 

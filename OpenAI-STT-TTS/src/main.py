@@ -1,25 +1,22 @@
 import os
 import azure.cognitiveservices.speech as speechsdk
 import openai
-from dotenv import load_dotenv
+from variables import *
 
-# Load environment variables from .env file
-load_dotenv('../.env')
-
-openai.api_key = os.environ.get('OPEN_AI_KEY')
-openai.api_base =  os.environ.get('OPEN_AI_ENDPOINT')
+openai.api_key = os.getenv('OPEN_AI_KEY')
+openai.api_base =  os.getenv('OPEN_AI_ENDPOINT')
 openai.api_type = 'azure'
 openai.api_version = '2022-12-01'
 
 # This will correspond to the custom name you chose for your deployment when you deployed a model.
 deployment_id='gpt-4-32k' 
-print(os.environ.get('OPEN_AI_KEY'))
-print(os.environ.get('OPEN_AI_ENDPOINT'))
-print(os.environ.get('SPEECH_KEY'))
-print(os.environ.get('SPEECH_REGION'))
+print(os.getenv('OPEN_AI_KEY'))
+print(os.getenv('OPEN_AI_ENDPOINT'))
+print(os.getenv('SPEECH_KEY'))
+print(os.getenv('SPEECH_REGION'))
 
 # This example requires environment variables named "SPEECH_KEY" and "SPEECH_REGION"
-speech_config = speechsdk.SpeechConfig(subscription=os.environ.get('SPEECH_KEY'), region=os.environ.get('SPEECH_REGION'))
+speech_config = speechsdk.SpeechConfig(subscription=os.getenv('SPEECH_KEY'), region=os.getenv('SPEECH_REGION'))
 audio_output_config = speechsdk.audio.AudioOutputConfig(use_default_speaker=True)
 audio_config = speechsdk.audio.AudioConfig(use_default_microphone=True)
 
