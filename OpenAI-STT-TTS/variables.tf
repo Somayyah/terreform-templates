@@ -17,3 +17,11 @@ output "SPEECH_REGION" {
   sensitive = true
   value     = azurerm_cognitive_account.watari-ai-speech.location
 }
+
+locals {
+  random_string = random_string.random.result
+}
+
+output "SUFFEX" {
+  value = random_string.random.result
+}

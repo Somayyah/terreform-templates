@@ -3,17 +3,13 @@ import azure.cognitiveservices.speech as speechsdk
 import openai
 from variables import *
 
-openai.api_key = os.getenv('OPEN_AI_KEY')
-openai.api_base =  os.getenv('OPEN_AI_ENDPOINT')
+openai.api_key = OPEN_AI_KEY
+openai.api_base =  OPEN_AI_ENDPOINT
 openai.api_type = 'azure'
 openai.api_version = '2022-12-01'
 
 # This will correspond to the custom name you chose for your deployment when you deployed a model.
-deployment_id='gpt-4-32k' 
-print(os.getenv('OPEN_AI_KEY'))
-print(os.getenv('OPEN_AI_ENDPOINT'))
-print(os.getenv('SPEECH_KEY'))
-print(os.getenv('SPEECH_REGION'))
+deployment_id = "watari-ai-aoai-cd-" + SUFFEX
 
 # This example requires environment variables named "SPEECH_KEY" and "SPEECH_REGION"
 speech_config = speechsdk.SpeechConfig(subscription=os.getenv('SPEECH_KEY'), region=os.getenv('SPEECH_REGION'))
@@ -34,7 +30,7 @@ tts_sentence_end = [ ".", "!", "?", ";", "。", "！", "？", "；", "\n" ]
 # Prompts Azure OpenAI with a request and synthesizes the response.
 def ask_openai(prompt):
     # Ask Azure OpenAI in streaming way
-    response = openai.Completion.create(engine=deployment_id, prompt=prompt, max_tokens=200, stream=True)
+    response = openai.ChatCompletion.create(engine=deployment_id, model="gpt-3.5-turbo", prompt=prompt, max_tokens=200, stream=False)
     collected_messages = []
     last_tts_request = None
 

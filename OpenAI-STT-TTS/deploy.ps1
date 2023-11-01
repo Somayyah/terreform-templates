@@ -14,6 +14,9 @@ if (-not (Test-Path "resource-group.tf")) {
     New-Item -ItemType SymbolicLink -Name "resource-group.tf" -Target "..\resource-group.tf"
 }
 
+# Run terraform fmt
+terraform fmt
+
 # Run terraform init
 terraform init
 
@@ -33,7 +36,7 @@ if (Test-Path $envFilePath) {
 
 # Get the output and save to .env file
 # Define an array of output keys
-$outputKeys = @("OPEN_AI_ENDPOINT", "OPEN_AI_KEY", "SPEECH_KEY", "SPEECH_REGION")
+$outputKeys = @("OPEN_AI_ENDPOINT", "OPEN_AI_KEY", "SPEECH_KEY", "SPEECH_REGION", "SUFFEX")
 
 # Loop through each key and append to .env
 foreach ($keyName in $outputKeys) {
@@ -45,3 +48,5 @@ foreach ($keyName in $outputKeys) {
 }
 
 python src/main.py
+
+# terraform destroy -auto-approve
