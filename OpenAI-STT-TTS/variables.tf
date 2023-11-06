@@ -1,11 +1,11 @@
 output "OPEN_AI_ENDPOINT" {
   sensitive = true
-  value     = azurerm_cognitive_account.watari-ai-aoai.endpoint
+  value     = module.my_openai.openai_endpoint
 }
 
 output "OPEN_AI_KEY" {
   sensitive = true
-  value     = azurerm_cognitive_account.watari-ai-aoai.primary_access_key
+  value     = module.my_openai.openai_primary_key
 }
 
 output "SPEECH_KEY" {

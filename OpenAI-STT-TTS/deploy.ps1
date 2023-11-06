@@ -18,7 +18,7 @@ if (-not (Test-Path "resource-group.tf")) {
 terraform fmt
 
 # Run terraform init
-terraform init
+terraform init -upgrade
 
 # Run terraform plan
 terraform plan
@@ -38,14 +38,20 @@ if (Test-Path $envFilePath) {
 # Define an array of output keys
 $outputKeys = @("OPEN_AI_ENDPOINT", "OPEN_AI_KEY", "SPEECH_KEY", "SPEECH_REGION", "SUFFEX")
 
+# Create a StreamWriter with UTF8 encoding without BOM
+$streamWriter = New-Object System.IO.StreamWriter($envFilePath, $false, (New-Object System.Text.UTF8Encoding($false)))
+
 # Loop through each key and append to .env
 foreach ($keyName in $outputKeys) {
     $keyValue = terraform output -raw $keyName
     if ($keyValue) {
         $outputString = $keyName.ToUpper() + "=" + '"' + $keyValue + '"'
-        $outputString | Out-File -FilePath $envFilePath -Encoding utf8 -Append
+        # Use StreamWriter to append the string to the file in UTF8 without BOM
+        $streamWriter.WriteLine($outputString)
     }
 }
+
+$streamWriter.Close()
 
 python src/main.py
 

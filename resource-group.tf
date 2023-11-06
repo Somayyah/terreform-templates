@@ -1,5 +1,5 @@
 resource "random_string" "random" {
-  length  = 5
+  length  = 6
   special = false
   upper   = false
   lower   = true
@@ -7,8 +7,9 @@ resource "random_string" "random" {
 }
 
 resource "azurerm_resource_group" "watari-ai" {
-  name     = "watari-ai-${local.random_string}"
-  location = "Sweden Central"
+  depends_on = [random_string.random]
+  name       = "watari-ai-${local.random_string}"
+  location   = "Sweden Central"
   tags = {
     environment : "development"
   }

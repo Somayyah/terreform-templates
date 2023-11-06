@@ -1,40 +1,58 @@
 // Create Azure OpenAI resource
 
-resource "azurerm_cognitive_account" "watari-ai-aoai" {
-  name                = "watari-ai-aoai-${local.random_string}"
-  location            = azurerm_resource_group.watari-ai.location
-  resource_group_name = azurerm_resource_group.watari-ai.name
-  kind                = "OpenAI"
-  sku_name            = "S0"
+module "my_openai" {
+  depends_on                    = [azurerm_resource_group.watari-ai]
+  source                        = "./modules/my_openai"
+  account_name                  = "watari-ai-aoai-${local.random_string}"
+  resource_group_name           = azurerm_resource_group.watari-ai.name
+  location                      = azurerm_resource_group.watari-ai.location
+  public_network_access_enabled = true
+  deployment = {
+    "chat_model" = {
+      name          = "watari-ai-aoai-cd-${local.random_string}"
+      model_format  = "OpenAI"
+      model_name    = "gpt-4"
+      model_version = "0613"
+      scale_type    = "Standard"
+    }
+  }
 
-  tags = azurerm_resource_group.watari-ai.tags
 }
-
 // Create Azure Speech resource
 
 resource "azurerm_cognitive_account" "watari-ai-speech" {
+  depends_on          = [azurerm_resource_group.watari-ai]
   name                = "watari-ai-speech-${local.random_string}"
   location            = azurerm_resource_group.watari-ai.location
   resource_group_name = azurerm_resource_group.watari-ai.name
   kind                = "SpeechServices"
-
-  sku_name = "S0"
-
-  tags = azurerm_resource_group.watari-ai.tags
+  sku_name            = "S0"
+  tags                = azurerm_resource_group.watari-ai.tags
 }
 
-// Azure cognitive service OpenAI deployment
+// Azure cognitive search service
+/* 
+resource "azurerm_search_service" "watari-ai-search" {
+  name                = "watari-ai-search-${local.random_string}"
+  resource_group_name = azurerm_resource_group.watari-ai.name
+  location            = azurerm_resource_group.watari-ai.location
+  sku                 = "standard"
 
-resource "azurerm_cognitive_deployment" "watari-ai-aoai-cd" {
-  name                 = "watari-ai-aoai-cd-${local.random_string}"
-  cognitive_account_id = azurerm_cognitive_account.watari-ai-aoai.id
-  model {
-    format  = "OpenAI"
-    name    = "gpt-4"
-    version = "0613"
-  }
-
-  scale {
-    type = "Standard"
-  }
+  local_authentication_enabled = false
 }
+
+resource "azurerm_storage_account" "watari-ai-db" {
+  name                     = "watari-ai-db-${local.random_string}"
+  resource_group_name      = azurerm_resource_group.watari-ai.name
+  location                 = azurerm_resource_group.watari-ai.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+
+resource "azurerm_search_shared_private_link_service" "watari-ai-search-shared-priv-link" {
+  name               = "watari-ai-search-shared-priv-link-${local.random_string}"
+  search_service_id  = azurerm_search_service.watari-ai-search.id
+  subresource_name   = "data"
+  target_resource_id = azurerm_storage_account.watari-ai-db.id
+  request_message    = "please approve"
+} */
